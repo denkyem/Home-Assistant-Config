@@ -1,0 +1,7 @@
+{
+  "domain": "clarifai_general",
+  "name": "Clarifai",
+  "dependencies": [],
+  "requirements": ["clarifai==2.4.0"],
+  "homeassistant": "0.96.0"
+}

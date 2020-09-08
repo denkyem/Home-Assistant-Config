@@ -1,0 +1,8 @@
+timer:
+  auto_turn_off_wc_corredor:
+    name: Tempo até desligar
+    duration: 600
+  auto_turn_off_wc_quarto:
+    name: Tempo até desligar
+    duration: 600
+

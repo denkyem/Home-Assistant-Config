@@ -1,0 +1,5 @@
+camera:
+  - platform: ffmpeg
+    input: !secret camera_office_url
+    name: Office Camera
+

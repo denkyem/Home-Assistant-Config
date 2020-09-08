@@ -1,0 +1,69 @@
+# speedtestdotnet:
+#   server_id: 4440
+#   scan_interval:
+#     minutes: 30
+#   monitored_conditions:
+#     - ping
+#     - download
+#     - upload
+
+tplink:
+  switch:
+    - host: !secret tplink_switch_ip
+
+
+# ------- Pi-Hole ------- #
+
+pi_hole:
+  host: !secret pihole_ip
+
+# ------- END Pihole
+# ------- ASUS Router ----- #
+
+asuswrt:
+  host: !secret asuswrt_ip
+  username: !secret asuswrt_username
+  password: !secret asuswrt_password
+  require_ip: false
+  interface: br1
+  sensors:
+    - devices
+    - upload
+    - download
+    - upload_speed
+    - download_speed
+  
+# # ----------------------- #
+
+
+
+sensor:
+
+# -------- EPSON ---------- #
+
+  # - platform: epsonworkforce
+    # host: !secret epson_printer_ip
+    # monitored_conditions:
+    # - black
+    # - yellow
+    # - magenta
+    # - cyan
+
+# -------- END EPSON ---------- #
+
+
+  - platform: uptime
+    unit_of_measurement: minutes
+
+  - platform: template
+    sensors:
+      hassio_uptime:
+        friendly_name: 'Hassio Uptime Timestamp' 
+        device_class: 'timestamp' 
+        value_template: >-
+          {{ (as_timestamp(now()) | int - (((states.sensor.uptime.state | float) * 60) | round(0))) | timestamp_local }}
+
+  - platform: version
+
+# --------- END Stats -------------- #
+

@@ -1,0 +1,29 @@
+# Everything ignored
+/*
+
+# Whitelist
+!*.yaml
+!.gitignore
+!*.md
+
+!/*/
+
+# Ignore folders
+.storage/
+.cloud/
+.google.token/
+script/
+www/images
+www/tileboard
+node-red/
+
+
+# WARNING files ignored, do not remove
+ip_bans.yaml
+secrets.yaml
+known_devices.yaml
+html5_push_registrations.conf
+zones.yaml
+packages/security/security.yaml
+packages/configs/google_service_account.json
+**/google_service_account.json

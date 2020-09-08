@@ -1,0 +1,135 @@
+# Mover para NODERED
+
+input_boolean:
+  ghost_mode:
+    name: Ghost Mode - Simular presença
+    initial: off
+    icon: mdi:ghost
+
+switch:
+  - platform: template
+    switches:
+      ghost_mode:
+        friendly_name: 'Ghost Mode - Simular presença'
+        value_template: "{{ is_state('input_boolean.ghost_mode', 'on') }}"
+        turn_on:
+          service: input_boolean.turn_on
+          data:
+            entity_id: input_boolean.ghost_mode
+        turn_off:
+          service: input_boolean.turn_off
+          data:
+            entity_id: input_boolean.ghost_mode
+        icon_template: >-
+          {% if is_state('input_boolean.ghost_mode', 'on') %}
+            mdi:ghost
+          {% else %}
+            mdi:ghost-off
+          {% endif %}
+
+
+automation:
+  - alias: 'Ghost Mode - Luzes Sala ON'
+    trigger:
+    - event: sunset
+      offset: -0:15
+      platform: sun
+    condition:
+    - condition: state
+      entity_id: input_boolean.ghost_mode
+      state: 'on'
+    action:
+    - data:
+        brightness_pct: 80
+        entity_id: light.luz_sala
+        kelvin: 3200
+        transition: 90
+      service: light.turn_on
+
+  - alias: 'Ghost Mode - Luzes Sala Toogle'
+    trigger:
+    - at: '21:57'
+      platform: time
+    condition:
+    - condition: state
+      entity_id: input_boolean.ghost_mode
+      state: 'on'
+    action:
+    - data:
+        entity_id: light.luz_sala
+      service: light.turn_toogle
+    - delay: 0:10:00
+    - data:
+        entity_id: light.luz_sala
+      service: light.turn_toogle
+
+  - alias: 'Ghost Mode - Luzes Sala OFF'
+    trigger:
+    - at: '22:30'
+      platform: time
+    condition:
+    - condition: state
+      entity_id: input_boolean.ghost_mode
+      state: 'on'
+    action:
+    - data:
+        entity_id: light.luz_sala
+        transition: 90
+      service: light.turn_off
+  
+  - alias: 'Ghost Mode - WC'
+    trigger:
+    - event: sunset
+      offset: 02:43
+      platform: sun
+    condition:
+    - condition: state
+      entity_id: input_boolean.ghost_mode
+      state: 'on'
+    action:
+    - data:
+        entity_id: light.wc_tecto
+      service: light.turn_on
+    - delay: 0:07:00
+    - data:
+        entity_id: light.wc_tecto
+      service: light.turn_off
+
+  
+  - alias: 'Ghost Mode - Quarto'
+    trigger:
+    - event: sunset
+      offset: 01:53
+      platform: sun
+    condition:
+    - condition: state
+      entity_id: input_boolean.ghost_mode
+      state: 'on'
+    action:
+    - data:
+        entity_id: group.luzes_quarto
+      service: homeassistant.turn_on
+    - delay: 0:05:34
+    - data:
+        entity_id: group.luzes_quarto
+      service: homeassistant.turn_off
+
+  - alias: 'Ghost Mode - Quarto Dormir'
+    trigger:
+    - event: sunset
+      offset: 05:40
+      platform: sun
+    condition:
+    - condition: state
+      entity_id: input_boolean.ghost_mode
+      state: 'on'
+    action:
+    - data:
+        entity_id: group.luzes_quarto
+      service: homeassistant.turn_on
+    - delay: 0:15:34
+    - data:
+        entity_id: group.luzes_quarto
+      service: homeassistant.turn_off
+
+    

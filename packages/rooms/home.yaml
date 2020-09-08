@@ -1,0 +1,51 @@
+binary_sensor:
+  - platform: trend
+    sensors:
+      temp_falling:
+        entity_id: sensor.xiaomi_sensor_outside_temperature
+        sample_duration: 7200
+        max_samples: 120
+        min_gradient: -0.0008
+        device_class: cold
+      temp_rising:
+        entity_id: sensor.xiaomi_sensor_outside_temperature
+        sample_duration: 7200
+        max_samples: 1200
+        min_gradient: 0.0008
+        device_class: heat
+
+sensor:
+
+  # Temperatura Média #
+  - platform: min_max
+    type: mean
+    name: 'Home Average Temperature'
+    round_digits: 1
+    entity_ids:
+      - sensor.xiaomi_livingroom_temperature
+      - sensor.xiaomi_sensor_bedroom_temperature
+      - sensor.aqara_sensor_office_temperature
+      - sensor.xiaomi_sensor_kitchen_temperature
+
+  
+  # Humidade Média #
+  - platform: min_max
+    type: mean
+    name: 'Home Average Humidity'
+    round_digits: 1
+    entity_ids:
+      - sensor.xiaomi_livingroom_humidity
+      - sensor.xiaomi_sensor_bedroom_humidity
+      - sensor.aqara_sensor_office_humidity
+      - sensor.xiaomi_sensor_kitchen_humidity
+
+
+
+
+
+vacuum:
+  - platform: miio2
+    host: 10.0.2.1
+    token: 5677453436534b584b4746413133666f
+    name: Sr. Alfredo
+

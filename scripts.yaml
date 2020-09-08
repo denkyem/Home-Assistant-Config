@@ -1,0 +1,21 @@
+'1574589569247':
+  alias: Restart Home Assistant
+  sequence:
+  - data: {}
+    service: homeassistant.restart
+'1580418129769':
+  alias: Reset Energy Meters
+  sequence:
+  - data: {}
+    entity_id: utility_meter.duplex_monthly_energy
+    service: utility_meter.reset
+  - entity_id: utility_meter.total_monthly_energy
+    service: utility_meter.reset
+  - entity_id: utility_meter.home_monthly_energy
+    service: utility_meter.reset
+dummy:
+  alias: Dummy
+  mode: single
+  sequence:
+  - delay:
+      milliseconds: 10

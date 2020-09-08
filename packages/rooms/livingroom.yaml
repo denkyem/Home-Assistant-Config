@@ -1,0 +1,72 @@
+# ------------- LG TV ----------- #
+webostv:
+  host: 10.0.3.1
+  name: TV Sala
+  turn_on_action:
+    service: wake_on_lan.send_magic_packet
+    data:
+      mac: !secret tv_lg_mac
+
+# ------------- END LG TV ----------- #
+
+
+yeelight:
+  devices:
+    10.0.4.1:
+      name: Luz Sala
+      use_music_mode: false
+   
+      
+
+
+
+climate:
+  - platform: generic_thermostat
+    name: Sala
+    heater: switch.ikea_aquecedor_sala_switch
+    target_sensor: sensor.xiaomi_livingroom_temperature
+    min_temp: 16
+    max_temp: 27
+    ac_mode: false
+    target_temp: 21
+    cold_tolerance: 0.2
+    hot_tolerance: 0.2
+    min_cycle_duration:
+      seconds: 20
+    initial_hvac_mode: "off"
+    away_temp: 19
+    precision: 0.5
+
+
+
+
+sensor:
+  - platform: template
+    sensors:
+      climate_temperature:
+        friendly_name: 'Temperature Definida Sala'
+        device_class: 'temperature'
+        value_template: "{{ state_attr('climate.sala','temperature') }}"
+
+      climate_current_temperature:
+        friendly_name: 'Temperatura Atual Sala' 
+        device_class: 'temperature'
+        value_template: "{{ state_attr('climate.sala','current_temperature') }}"
+
+
+
+# -------------- ESP Bluetooth ----------- #
+
+
+  - platform: template
+    sensors:
+      esp32_uptime_timestamp:
+        friendly_name: 'ESP32 Uptime Timestamp' 
+        device_class: 'timestamp' 
+        value_template: >-
+          {{ (as_timestamp(now()) | int - states.sensor.esp32_livingroom_uptime.state | int) | timestamp_local }}
+
+
+# -------------- END ESP Bluetooth ----------- #
+
+

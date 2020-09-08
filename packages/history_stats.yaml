@@ -1,0 +1,49 @@
+sensor:
+  - platform: history_stats
+    name: Lights ON today
+    entity_id: group.all_lights
+    state: 'on'
+    type: time
+    start: '{{ now().replace(hour=0, minute=0, second=0) }}'
+    end: '{{ now() }}'
+
+  - platform: history_stats
+    name: TV ON today
+    entity_id: media_player.tv_sala
+    state: 'on'
+    type: time
+    start: '{{ now().replace(hour=0, minute=0, second=0) }}'
+    end: '{{ now() }}'
+
+  - platform: history_stats
+    name: Carlos Moving Hours Today
+    entity_id: binary_sensor.carlos_moving
+    state: 'on'
+    type: time
+    start: '{{ now().replace(hour=0, minute=0, second=0) }}'
+    end: '{{ now() }}'
+
+  - platform: history_stats
+    name: Isabela Moving Hours Today
+    entity_id: binary_sensor.carlos_moving
+    state: 'on'
+    type: time
+    start: '{{ now().replace(hour=0, minute=0, second=0) }}'
+    end: '{{ now() }}'
+
+
+binary_sensor:
+  - platform: template
+    sensors:
+      carlos_moving:
+        friendly_name: Carlos Moving
+        device_class: moving
+        icon_template: mdi:walk
+        value_template: >-
+          {{ state_attr('device_tracker.life360_carlos_pereira','moving') }}
+      isabela_moving:
+        friendly_name: Isabela Moving
+        device_class: moving
+        icon_template: mdi:walk
+        value_template: >-
+          {{ state_attr('device_tracker.life360_isabela_gloria','moving') }}

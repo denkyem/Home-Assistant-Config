@@ -1,0 +1,52 @@
+life360:
+  driving_speed: 20
+
+
+proximity:
+  carlos_casa:
+    zone: home
+    devices:
+      - device_tracker.life360_carlos_pereira
+    unit_of_measurement: km
+    tolerance: 100
+
+
+  isabela_casa:
+    zone: home
+    devices:
+      - device_tracker.life360_isabela_gloria
+    unit_of_measurement: km
+    tolerance: 100
+
+
+input_select:
+  carlos_status_dropdown:
+    name: Carlos
+    options:
+      - Casa
+      - Acabou de chegar
+      - Acabou de sair
+      - Ausente
+      - Ausente prolongado
+      - Escritório
+    initial: Casa
+  isabela_status_dropdown:
+    name: Isabela
+    options:
+      - Casa
+      - Acabou de chegar
+      - Acabou de sair
+      - Ausente
+      - Ausente prolongado
+      - Escritório
+    initial: Casa
+
+sensor:
+  - platform: template
+    sensors:
+      carlos_status:
+        value_template: '{{ states.input_select.carlos_status_dropdown.state }}'
+        friendly_name: 'Carlos'
+      isabela_status:
+        value_template: '{{ states.input_select.isabela_status_dropdown.state }}'
+        friendly_name: 'Isabela'

@@ -1,0 +1,944 @@
+custom_header:
+  compact_mode: true
+resources:
+  - type: module
+    url: /hacsfiles/lovelace-card-tools/card-tools.js
+  - type: module
+    url: /hacsfiles/secondaryinfo-entity-row/secondaryinfo-entity-row.js
+title: ''
+views:
+  - badges: []
+    cards:
+      - cards:
+          - cards:
+              - cards:
+                  - card:
+                      aspect_ratio: 100%
+                      entity: sensor.carlos_status
+                      image: /local/images/person/carlos.jpg
+                      type: picture-entity
+                    conditions:
+                      - entity: person.carlos
+                        state: home
+                    type: conditional
+                  - card:
+                      aspect_ratio: '1:1'
+                      dark_mode: false
+                      default_zoom: 12
+                      entities:
+                        - entity: person.carlos
+                      geo_location_sources: []
+                      hours_to_show: 12
+                      type: map
+                    conditions:
+                      - entity: person.carlos
+                        state_not: home
+                    type: conditional
+                type: vertical-stack
+              - cards:
+                  - card:
+                      aspect_ratio: 100%
+                      entity: sensor.isabela_status
+                      image: /local/images/person/isabela.jpg
+                      type: picture-entity
+                    conditions:
+                      - entity: person.isabela
+                        state: home
+                    type: conditional
+                  - card:
+                      aspect_ratio: '1:1'
+                      dark_mode: false
+                      default_zoom: 12
+                      entities:
+                        - entity: person.isabela
+                      geo_location_sources: []
+                      hours_to_show: 12
+                      type: map
+                    conditions:
+                      - entity: person.isabela
+                        state_not: home
+                    type: conditional
+                type: vertical-stack
+            type: horizontal-stack
+        type: vertical-stack
+      - entity: weather.dark_sky
+        show_forecast: true
+        type: weather-forecast
+      - entities:
+          - entity: group.all_lights
+            icon: 'mdi:home-lightbulb-outline'
+            name: Luzes de Casa
+          - conditions:
+              - entity: input_boolean.expand_casa_luzes
+                state: 'on'
+            row:
+              type: divider
+            type: conditional
+          - entity: input_boolean.expand_casa_luzes
+            name: Luzes
+            secondary_info: >-
+              [[ if(group.luzes_casa == on, "<b
+              style=color:var(--state-icon-active-color);font-size:12px>Ligadas</b>",
+              "<b style=font-size:12px>Desligadas</b>") ]]
+            tap_action:
+              action: none
+            type: 'custom:secondaryinfo-entity-row'
+          - conditions:
+              - entity: input_boolean.expand_casa_luzes
+                state: 'on'
+            row:
+              entity: light.entrada_porta
+            type: conditional
+          - conditions:
+              - entity: input_boolean.expand_casa_luzes
+                state: 'on'
+            row:
+              entity: light.hall_corredor
+            type: conditional
+          - conditions:
+              - entity: input_boolean.expand_casa_luzes
+                state: 'on'
+            row:
+              type: divider
+            type: conditional
+          - conditions:
+              - entity: input_boolean.expand_casa_energia
+                state: 'on'
+            row:
+              type: divider
+            type: conditional
+          - entity: input_boolean.expand_casa_energia
+            name: Energia
+            secondary_info: '<b style=font-size:11px>[[ sensor.main_power_meter ]] W</b>'
+            tap_action:
+              action: none
+            type: 'custom:secondaryinfo-entity-row'
+          - conditions:
+              - entity: input_boolean.expand_casa_energia
+                state: 'on'
+            row:
+              entity: sensor.main_power_meter
+              name: Energia Total
+            type: conditional
+          - conditions:
+              - entity: input_boolean.expand_casa_energia
+                state: 'on'
+            row:
+              entity: sensor.home_power_meter
+              name: Energia Casa
+            type: conditional
+          - conditions:
+              - entity: input_boolean.expand_casa_energia
+                state: 'on'
+            row:
+              entity: sensor.duplex_power_meter
+              name: Energia Duplex
+            type: conditional
+          - conditions:
+              - entity: input_boolean.expand_casa_energia
+                state: 'on'
+            row:
+              entity: sensor.xiaomi_switch_bimby_power
+              name: Energia Bimby
+            type: conditional
+          - conditions:
+              - entity: input_boolean.expand_casa_energia
+                state: 'on'
+            row:
+              entity: sensor.tplink_dishwasher_power
+              name: Energia Máquina de Loiça
+            type: conditional
+          - conditions:
+              - entity: input_boolean.expand_casa_energia
+                state: 'on'
+            row:
+              type: divider
+            type: conditional
+          - entity: sensor.xiaomi_sensor_outside_temperature
+            name: Temperatura Exterior
+            secondary_info: >-
+              [[ if(input_boolean.expand_casa_ambiente == on, "", "<b
+              style=font-size:11px>Humidade") ]] [[
+              if(input_boolean.expand_casa_ambiente == on, "",
+              sensor.xiaomi_sensor_outside_humidity) ]][[
+              if(input_boolean.expand_casa_ambiente == on, "", "%</b>") ]]
+            type: 'custom:secondaryinfo-entity-row'
+          - entity: sensor.home_average_temperature
+            name: Temperatura Média Interior
+            secondary_info: >-
+              [[ if(input_boolean.expand_casa_ambiente == on, "", "<b
+              style=font-size:11px>Humidade") ]] [[
+              if(input_boolean.expand_casa_ambiente == on, "",
+              sensor.home_average_humidity) ]][[
+              if(input_boolean.expand_casa_ambiente == on, "", "%</b>") ]]
+            type: 'custom:secondaryinfo-entity-row'
+        footer:
+          detail: 2
+          entity: sensor.home_average_temperature
+          hours_to_show: 24
+          type: graph
+        icon: 'mdi:home'
+        show_header_toggle: false
+        state_color: true
+        title: Casa
+        type: entities
+      - cards:
+          - entities:
+              - conditions:
+                  - entity: input_boolean.expand_sala_luzes
+                    state: 'on'
+                row:
+                  type: divider
+                type: conditional
+              - entity: input_boolean.expand_sala_luzes
+                name: Luzes
+                secondary_info: >-
+                  [[ if(group.luzes_sala == on, "<b
+                  style=color:var(--state-icon-active-color);font-size:12px>Ligadas</b>",
+                  "<b style=font-size:12px>Desligadas</b>") ]]
+                tap_action:
+                  action: none
+                type: 'custom:secondaryinfo-entity-row'
+              - conditions:
+                  - entity: input_boolean.expand_sala_luzes
+                    state: 'on'
+                row:
+                  entity: light.entrada_bottom_hall
+                type: conditional
+              - conditions:
+                  - entity: input_boolean.expand_sala_luzes
+                    state: 'on'
+                row:
+                  entity: light.entrada_mesa
+                type: conditional
+              - conditions:
+                  - entity: input_boolean.expand_sala_luzes
+                    state: 'on'
+                row:
+                  entity: light.luz_sala
+                  secondary_info: brightness
+                type: conditional
+              - conditions:
+                  - entity: input_boolean.expand_sala_luzes
+                    state: 'on'
+                row:
+                  entity: light.tasmota_ledstrip
+                  name: Luz Ambiente
+                  secondary_info: brightness
+                type: conditional
+              - conditions:
+                  - entity: input_boolean.expand_sala_luzes
+                    state: 'on'
+                row:
+                  entity: light.entrada_bottom_sala
+                type: conditional
+              - conditions:
+                  - entity: input_boolean.expand_sala_luzes
+                    state: 'on'
+                row:
+                  type: divider
+                type: conditional
+              - entity: sensor.xiaomi_livingroom_temperature
+                name: Temperatura
+                secondary_info: >-
+                  <b style=font-size:11px;>Humidade [[
+                  sensor.xiaomi_livingroom_humidity ]]%</b>
+                type: 'custom:secondaryinfo-entity-row'
+            footer:
+              detail: 2
+              entity: sensor.xiaomi_livingroom_temperature
+              hours_to_show: 24
+              type: graph
+            icon: 'mdi:sofa'
+            show_header_toggle: false
+            state_color: true
+            title: Sala
+            type: entities
+        type: vertical-stack
+      - entities:
+          - conditions:
+              - entity: input_boolean.expand_cozinha_luzes
+                state: 'on'
+            row:
+              type: divider
+            type: conditional
+          - entity: input_boolean.expand_cozinha_luzes
+            name: Luzes
+            secondary_info: >-
+              [[ if(group.luzes_cozinha == on, "<b
+              style=color:var(--state-icon-active-color);font-size:12px>Ligadas</b>",
+              "<b style=font-size:12px>Desligadas</b>") ]]
+            tap_action:
+              action: none
+            type: 'custom:secondaryinfo-entity-row'
+          - conditions:
+              - entity: input_boolean.expand_cozinha_luzes
+                state: 'on'
+            row:
+              entity: light.cozinha_tecto
+            type: conditional
+          - conditions:
+              - entity: input_boolean.expand_cozinha_luzes
+                state: 'on'
+            row:
+              entity: light.bancada_cozinha
+            type: conditional
+          - conditions:
+              - entity: input_boolean.expand_cozinha_luzes
+                state: 'on'
+            row:
+              entity: light.despensa
+            type: conditional
+          - conditions:
+              - entity: input_boolean.expand_cozinha_luzes
+                state: 'on'
+            row:
+              type: divider
+            type: conditional
+          - conditions:
+              - entity: input_boolean.expand_cozinha_equipamentos
+                state: 'on'
+            row:
+              type: divider
+            type: conditional
+          - entity: input_boolean.expand_cozinha_equipamentos
+            name: Equipamentos
+            secondary_info: >-
+              [[ if(binary_sensor.equipamentos_cozinha==on, "<b
+              style=color:var(--state-icon-active-color);font-size:12px>Ligados</b>",
+              "<b style=font-size:12px>Desligados</b>") ]]
+            tap_action:
+              action: none
+            type: 'custom:secondaryinfo-entity-row'
+          - conditions:
+              - entity: input_boolean.expand_cozinha_equipamentos
+                state: 'on'
+            row:
+              entity: switch.bimby
+              secondary_info: >-
+                <b style=font-size:11px>[[ sensor.bimby_status ]] - [[
+                sensor.xiaomi_switch_bimby_power ]] W</b>
+              state_color: true
+              type: 'custom:secondaryinfo-entity-row'
+            type: conditional
+          - conditions:
+              - entity: input_boolean.expand_cozinha_equipamentos
+                state: 'on'
+            row:
+              entity: sensor.dishwasher_status
+              secondary_info: >-
+                <b style=font-size:11px>[[ sensor.tplink_dishwasher_power ]]
+                W</b>
+              state_color: false
+              type: 'custom:secondaryinfo-entity-row'
+            type: conditional
+          - conditions:
+              - entity: input_boolean.expand_cozinha_equipamentos
+                state: 'on'
+            row:
+              type: divider
+            type: conditional
+          - conditions:
+              - entity: input_boolean.show_timer_cozinha
+                state: 'on'
+            row:
+              type: divider
+            type: conditional
+          - entity: input_boolean.show_timer_cozinha
+            name: Temporizador
+            secondary_info: >-
+              [[ if(timer.timer_cozinha == active, "<b
+              style=color:var(--state-icon-active-color);font-size:12px>Ligado</b>",
+              "") ]]
+            tap_action:
+              action: none
+            type: 'custom:secondaryinfo-entity-row'
+          - conditions:
+              - entity: input_boolean.show_timer_cozinha
+                state: 'on'
+            row:
+              entity: input_boolean.timer_cozinha
+              state_color: true
+            type: conditional
+          - conditions:
+              - entity: input_boolean.show_timer_cozinha
+                state: 'on'
+              - entity: input_boolean.timer_cozinha
+                state: 'on'
+            row:
+              entity: timer.timer_cozinha
+              state_color: true
+            type: conditional
+          - conditions:
+              - entity: input_boolean.show_timer_cozinha
+                state: 'on'
+              - entity: input_boolean.timer_cozinha
+                state: 'off'
+            row:
+              entity: input_number.timer_cozinha
+              state_color: true
+              type: 'custom:secondaryinfo-entity-row'
+            type: conditional
+          - conditions:
+              - entity: input_boolean.show_timer_cozinha
+                state: 'on'
+            row:
+              type: divider
+            type: conditional
+          - entity: sensor.xiaomi_sensor_kitchen_temperature
+            name: Temperatura
+            secondary_info: >-
+              <b style=font-size:11px;>Humidade [[
+              sensor.xiaomi_sensor_kitchen_humidity ]]%</b>
+            type: 'custom:secondaryinfo-entity-row'
+        footer:
+          detail: 2
+          entity: sensor.xiaomi_sensor_kitchen_temperature
+          hours_to_show: 24
+          type: graph
+        icon: 'mdi:food-fork-drink'
+        show_header_toggle: false
+        state_color: true
+        title: Cozinha
+        type: entities
+      - entities:
+          - conditions:
+              - entity: input_boolean.expand_escritorio_luzes
+                state: 'on'
+            row:
+              type: divider
+            type: conditional
+          - entity: input_boolean.expand_escritorio_luzes
+            icon: 'mdi:toggle-switch-outline'
+            name: Luzes
+            secondary_info: >-
+              [[ if(group.luzes_escritorio == on, "<b
+              style=color:var(--state-icon-active-color);font-size:12px>Ligadas</b>",
+              "<b style=font-size:12px>Desligadas</b>") ]]
+            tap_action:
+              action: none
+            type: 'custom:secondaryinfo-entity-row'
+          - conditions:
+              - entity: input_boolean.expand_escritorio_luzes
+                state: 'on'
+            row:
+              entity: light.escritorio
+              name: Tecto
+            type: conditional
+          - conditions:
+              - entity: input_boolean.expand_escritorio_luzes
+                state: 'on'
+            row:
+              entity: light.led_strip
+              secondary_info: brightness
+            type: conditional
+          - conditions:
+              - entity: input_boolean.expand_escritorio_luzes
+                state: 'on'
+            row:
+              type: divider
+            type: conditional
+          - conditions:
+              - entity: input_boolean.expand_escritorio_switch
+                state: 'on'
+            row:
+              type: divider
+            type: conditional
+          - entity: input_boolean.expand_escritorio_switch
+            name: Equipamentos
+            secondary_info: >-
+              [[ if(group.equipamentos_escritorio == on, "<b
+              style=color:var(--state-icon-active-color);font-size:12px>Ligados</b>",
+              "<b style=font-size:12px>Desligados</b>") ]]
+            tap_action:
+              action: none
+            type: 'custom:secondaryinfo-entity-row'
+          - conditions:
+              - entity: input_boolean.expand_escritorio_switch
+                state: 'on'
+            row:
+              entity: climate.escritorio
+              icon: 'mdi:fan'
+              name: Ventoinha
+              state_color: true
+            type: conditional
+          - conditions:
+              - entity: input_boolean.expand_escritorio_temporizador
+                state: 'on'
+              - entity: input_boolean.expand_escritorio_switch
+                state: 'on'
+            row:
+              type: divider
+            type: conditional
+          - conditions:
+              - entity: input_boolean.expand_escritorio_switch
+                state: 'on'
+            row:
+              entity: input_boolean.expand_escritorio_temporizador
+              name: Temporizador
+              secondary_info: >-
+                [[ if(timer.office_fan == active, "<b
+                style=color:var(--state-icon-active-color);font-size:12px>Ligado</b>",
+                "") ]]
+              tap_action:
+                action: none
+              type: 'custom:secondaryinfo-entity-row'
+            type: conditional
+          - conditions:
+              - entity: input_boolean.expand_escritorio_switch
+                state: 'on'
+              - entity: input_boolean.expand_escritorio_temporizador
+                state: 'on'
+            row:
+              entity: input_boolean.timer_office_fan
+              name: Ventoinha Auto-Off
+              state_color: true
+            type: conditional
+          - conditions:
+              - entity: input_boolean.expand_escritorio_switch
+                state: 'on'
+              - entity: input_boolean.expand_escritorio_temporizador
+                state: 'on'
+              - entity: input_boolean.timer_office_fan
+                state: 'off'
+            row:
+              entity: input_number.timer_office_fan_hours
+              type: 'custom:secondaryinfo-entity-row'
+            type: conditional
+          - conditions:
+              - entity: input_boolean.expand_escritorio_switch
+                state: 'on'
+              - entity: input_boolean.expand_escritorio_temporizador
+                state: 'on'
+              - entity: input_boolean.timer_office_fan
+                state: 'off'
+            row:
+              entity: input_number.timer_office_fan_minutes
+              type: 'custom:secondaryinfo-entity-row'
+            type: conditional
+          - conditions:
+              - entity: input_boolean.expand_escritorio_switch
+                state: 'on'
+              - entity: input_boolean.expand_escritorio_temporizador
+                state: 'on'
+              - entity: input_boolean.timer_office_fan
+                state: 'on'
+            row:
+              entity: timer.office_fan
+              name: Tempo restante
+              state_color: true
+            type: conditional
+          - conditions:
+              - entity: input_boolean.expand_escritorio_temporizador
+                state: 'on'
+              - entity: input_boolean.expand_escritorio_switch
+                state: 'on'
+            row:
+              type: divider
+            type: conditional
+          - conditions:
+              - entity: input_boolean.expand_escritorio_switch
+                state: 'on'
+            row:
+              entity: switch.desktop
+              state_color: true
+            type: conditional
+          - conditions:
+              - entity: input_boolean.expand_escritorio_switch
+                state: 'on'
+            row:
+              entity: switch.sonoff_rf
+              state_color: true
+            type: conditional
+          - conditions:
+              - entity: input_boolean.expand_escritorio_switch
+                state: 'on'
+            row:
+              type: divider
+            type: conditional
+          - entity: sensor.aqara_sensor_office_temperature
+            name: Temperatura
+            secondary_info: >-
+              <b style=font-size:11px>Humidade [[
+              sensor.aqara_sensor_office_humidity ]]%</b>
+            type: 'custom:secondaryinfo-entity-row'
+        footer:
+          detail: 2
+          entity: sensor.aqara_sensor_office_temperature
+          hours_to_show: 24
+          type: graph
+        icon: 'mdi:desk-lamp'
+        show_header_toggle: false
+        state_color: true
+        title: Escritório
+        type: entities
+      - entities:
+          - conditions:
+              - entity: input_boolean.expand_quarto_luzes
+                state: 'on'
+            row:
+              type: divider
+            type: conditional
+          - entity: input_boolean.expand_quarto_luzes
+            name: Luzes
+            secondary_info: >-
+              [[ if(group.luzes_quarto == on, "<b
+              style=color:var(--state-icon-active-color);font-size:12px>Ligadas</b>",
+              "<b style=font-size:12px>Desligadas</b>") ]]
+            tap_action:
+              action: none
+            type: 'custom:secondaryinfo-entity-row'
+          - conditions:
+              - entity: input_boolean.expand_quarto_luzes
+                state: 'on'
+            row:
+              entity: light.quarto_tecto
+            type: conditional
+          - conditions:
+              - entity: input_boolean.expand_quarto_luzes
+                state: 'on'
+            row:
+              entity: light.quarto_hall
+            type: conditional
+          - conditions:
+              - entity: input_boolean.expand_quarto_luzes
+                state: 'on'
+            row:
+              entity: light.mesa_de_cabeceira_isabela
+            type: conditional
+          - conditions:
+              - entity: input_boolean.expand_quarto_luzes
+                state: 'on'
+            row:
+              entity: light.mesa_de_cabeceira_carlos
+            type: conditional
+          - conditions:
+              - entity: input_boolean.expand_quarto_luzes
+                state: 'on'
+            row:
+              type: divider
+            type: conditional
+          - entity: sensor.xiaomi_sensor_bedroom_temperature
+            name: Temperatura
+            secondary_info: >-
+              <b style=font-size:11px>Humidade [[
+              sensor.xiaomi_sensor_bedroom_humidity ]]%</b>
+            type: 'custom:secondaryinfo-entity-row'
+        footer:
+          detail: 2
+          entity: sensor.xiaomi_sensor_bedroom_temperature
+          hours_to_show: 24
+          type: graph
+        icon: 'mdi:bed'
+        state_color: true
+        title: Quarto
+        type: entities
+      - entities:
+          - conditions:
+              - entity: input_boolean.expand_wc_quarto_luzes
+                state: 'on'
+            row:
+              type: divider
+            type: conditional
+          - entity: input_boolean.expand_wc_quarto_luzes
+            name: Luzes
+            secondary_info: >-
+              [[ if(group.luzes_wc_quarto == on, "<b
+              style=color:var(--state-icon-active-color);font-size:12px>Ligadas</b>",
+              "<b style=font-size:12px>Desligadas</b>") ]]
+            tap_action:
+              action: none
+            type: 'custom:secondaryinfo-entity-row'
+          - conditions:
+              - entity: input_boolean.expand_wc_quarto_luzes
+                state: 'on'
+            row:
+              entity: light.wc_quarto_espelho
+            type: conditional
+          - conditions:
+              - entity: input_boolean.expand_wc_quarto_luzes
+                state: 'on'
+            row:
+              entity: light.wc_quarto_tecto
+            type: conditional
+          - conditions:
+              - entity: input_boolean.expand_wc_quarto_luzes
+                state: 'on'
+            row:
+              type: divider
+            type: conditional
+          - conditions:
+              - entity: input_boolean.expand_wc_quarto_switch
+                state: 'on'
+            row:
+              type: divider
+            type: conditional
+          - entity: input_boolean.expand_wc_quarto_switch
+            name: Equipamentos
+            secondary_info: >-
+              [[ if(group.equipamentos_wc_quarto == on, "<b
+              style=color:var(--state-icon-active-color);font-size:12px>Ligados</b>",
+              "<b style=font-size:12px>Desligados</b>") ]]
+            tap_action:
+              action: none
+            type: 'custom:secondaryinfo-entity-row'
+          - conditions:
+              - entity: input_boolean.expand_wc_quarto_switch
+                state: 'on'
+            row:
+              entity: switch.wc_quarto_aquecedor
+              state_color: true
+            type: conditional
+          - conditions:
+              - entity: input_boolean.expand_wc_quarto_switch
+                state: 'on'
+            row:
+              type: divider
+            type: conditional
+          - conditions:
+              - entity: input_boolean.show_timer_wc_quarto
+                state: 'on'
+            row:
+              type: divider
+            type: conditional
+          - entity: input_boolean.show_timer_wc_quarto
+            name: Temporizador
+            secondary_info: >-
+              [[ if(timer.auto_turn_off_wc_quarto == active, "<b
+              style=color:var(--state-icon-active-color);font-size:12px>Ligado</b>",
+              "") ]]
+            state_color: true
+            tap_action:
+              action: none
+            type: 'custom:secondaryinfo-entity-row'
+          - conditions:
+              - entity: input_boolean.show_timer_wc_quarto
+                state: 'on'
+            row:
+              entity: input_boolean.auto_turn_off_wc_quarto
+              state_color: true
+            type: conditional
+          - conditions:
+              - entity: input_boolean.show_timer_wc_quarto
+                state: 'on'
+              - entity: input_boolean.auto_turn_off_wc_quarto
+                state: 'on'
+            row:
+              entity: timer.auto_turn_off_wc_quarto
+              state_color: true
+            type: conditional
+          - conditions:
+              - entity: input_boolean.show_timer_wc_quarto
+                state: 'on'
+              - entity: input_boolean.auto_turn_off_wc_quarto
+                state: 'off'
+            row:
+              entity: input_number.auto_turn_off_wc_quarto
+              state_color: true
+              type: 'custom:secondaryinfo-entity-row'
+            type: conditional
+          - conditions:
+              - entity: input_boolean.show_timer_wc_quarto
+                state: 'on'
+            row:
+              type: divider
+            type: conditional
+        icon: 'mdi:shower'
+        show_header_toggle: false
+        state_color: true
+        title: WC Quarto
+        type: entities
+      - entities:
+          - conditions:
+              - entity: input_boolean.expand_wc_corredor_luzes
+                state: 'on'
+            row:
+              type: divider
+            type: conditional
+          - entity: input_boolean.expand_wc_corredor_luzes
+            name: Luzes
+            secondary_info: >-
+              [[ if(group.luzes_wc_corredor == on, "<b
+              style=color:var(--state-icon-active-color);font-size:12px>Ligadas</b>",
+              "<b style=font-size:12px>Desligadas</b>") ]]
+            tap_action:
+              action: none
+            type: 'custom:secondaryinfo-entity-row'
+          - conditions:
+              - entity: input_boolean.expand_wc_corredor_luzes
+                state: 'on'
+            row:
+              entity: light.wc_corredor_espelho
+            type: conditional
+          - conditions:
+              - entity: input_boolean.expand_wc_corredor_luzes
+                state: 'on'
+            row:
+              entity: light.wc_corredor_tecto
+            type: conditional
+          - conditions:
+              - entity: input_boolean.expand_wc_corredor_luzes
+                state: 'on'
+            row:
+              type: divider
+            type: conditional
+          - conditions:
+              - entity: input_boolean.expand_wc_corredor_switch
+                state: 'on'
+            row:
+              type: divider
+            type: conditional
+          - entity: input_boolean.expand_wc_corredor_switch
+            name: Equipamentos
+            secondary_info: >-
+              [[ if(group.equipamentos_wc_corredor == on, "<b
+              style=color:var(--state-icon-active-color);font-size:12px>Ligados</b>",
+              "<b style=font-size:12px>Desligados</b>") ]]
+            tap_action:
+              action: none
+            type: 'custom:secondaryinfo-entity-row'
+          - conditions:
+              - entity: input_boolean.expand_wc_corredor_switch
+                state: 'on'
+            row:
+              entity: switch.wc_corredor_aquecedor
+              state_color: true
+            type: conditional
+          - conditions:
+              - entity: input_boolean.expand_wc_corredor_switch
+                state: 'on'
+            row:
+              entity: switch.wc1_ventilador
+              state_color: true
+            type: conditional
+          - conditions:
+              - entity: input_boolean.expand_wc_corredor_switch
+                state: 'on'
+            row:
+              type: divider
+            type: conditional
+          - conditions:
+              - entity: input_boolean.show_timer_wc_corredor
+                state: 'on'
+            row:
+              type: divider
+            type: conditional
+          - entity: input_boolean.show_timer_wc_corredor
+            name: Temporizador
+            secondary_info: >-
+              [[ if(timer.auto_turn_off_wc_corredor == active, "<b
+              style=color:var(--state-icon-active-color);font-size:12px>Ligado</b>",
+              "") ]]
+            tap_action:
+              action: none
+            type: 'custom:secondaryinfo-entity-row'
+          - conditions:
+              - entity: input_boolean.show_timer_wc_corredor
+                state: 'on'
+            row:
+              entity: input_boolean.auto_turn_off_wc_corredor
+              state_color: true
+            type: conditional
+          - conditions:
+              - entity: input_boolean.show_timer_wc_corredor
+                state: 'on'
+              - entity: input_boolean.auto_turn_off_wc_corredor
+                state: 'on'
+            row:
+              entity: timer.auto_turn_off_wc_corredor
+              state_color: true
+            type: conditional
+          - conditions:
+              - entity: input_boolean.show_timer_wc_corredor
+                state: 'on'
+              - entity: input_boolean.auto_turn_off_wc_corredor
+                state: 'off'
+            row:
+              entity: input_number.auto_turn_off_wc_corredor
+              state_color: true
+              type: 'custom:secondaryinfo-entity-row'
+            type: conditional
+          - conditions:
+              - entity: input_boolean.show_timer_wc_corredor
+                state: 'on'
+            row:
+              type: divider
+            type: conditional
+        icon: 'mdi:toilet'
+        show_header_toggle: false
+        state_color: true
+        title: WC Corredor
+        type: entities
+    icon: 'mdi:home'
+    path: home
+    title: Home
+  - badges: []
+    cards:
+      - entity: alarm_control_panel.ha_alarm
+        name: Alarme
+        states:
+          - arm_home
+          - arm_away
+        type: alarm-panel
+      - entities:
+          - entity: binary_sensor.xiaomi_sensor_porta_entrada_contact
+          - entity: switch.ghost_mode
+            name: Ghost Mode
+        show_state: true
+        type: glance
+      - entities:
+          - entity: alarm_control_panel.ha_alarm
+          - entity: binary_sensor.xiaomi_sensor_porta_entrada_contact
+            name: Porta
+          - entity: input_boolean.ghost_mode
+        hours_to_show: 24
+        refresh_interval: 0
+        title: Histórico 24h
+        type: history-graph
+      - aspect_ratio: 0%
+        camera_image: camera.office_camera
+        entities:
+          - entity: group.luzes_escritorio
+        title: Escritório
+        type: picture-glance
+    icon: 'mdi:security'
+    path: security
+    title: Segurança
+  - badges: []
+    cards:
+      - type: shopping-list
+    icon: 'mdi:cart-outline'
+    panel: true
+    path: lista-de-compras
+    title: Lista de Compras
+  - badges: []
+    cards:
+      - cards:
+          - content: |
+              **Combustíveis**
+            type: markdown
+          - cards:
+              - entities:
+                  - entity: sensor.fuel_180395_gasoleo_especial
+                  - entity: sensor.fuel_180395_gasolina_especial_95
+                    icon: 'mdi:gas-station-outline'
+                show_name: false
+                title: Prio (Oeiras)
+                type: glance
+              - entities:
+                  - entity: sensor.fuel_180251_gasoleo_especial
+                  - entity: sensor.fuel_180251_gasolina_especial_95
+                    icon: 'mdi:gas-station-outline'
+                show_name: false
+                title: Prio (Trajouce)
+                type: glance
+            type: horizontal-stack
+        type: vertical-stack
+      - entity: vacuum.sr_alfredo
+        image: /local/images/sr_alfredo.jpg
+        name: Sr. Alfredo
+        type: 'custom:xiaomi-vacuum-card'
+        vendor: xiaomi
+    icon: 'mdi:tools'
+    path: tools
+    title: Tools

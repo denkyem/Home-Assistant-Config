@@ -1,0 +1,145 @@
+input_number:
+  energy_start_day:
+    min: 1
+    max: 32
+    step: 1
+
+sensor:
+  # Potencia Total #
+  - platform: mqtt
+    name: "Main Power Meter"
+    state_topic: "shellies/shelly-power-meter-1/emeter/0/power"
+    qos: 1
+    unit_of_measurement: "W"
+    device_class: power
+    icon: mdi:flash-circle
+
+  # Potencia Duplex #
+  - platform: mqtt
+    name: "Duplex Power Meter"
+    state_topic: "shellies/shelly-power-meter-1/emeter/1/power"
+    qos: 1
+    unit_of_measurement: "W"
+    device_class: power
+    icon: mdi:flash-circle
+
+  # Voltagem #
+  - platform: mqtt
+    name: "Main Power Meter Voltage"
+    state_topic: "shellies/shelly-power-meter-1/emeter/0/voltage"
+    qos: 1
+    unit_of_measurement: "V"
+    icon: mdi:flash
+
+
+  - platform: template
+    sensors:
+      fatura_energia:
+        friendly_name: "Fatura Energia Bi-horário"
+        value_template: >-
+          {{ ((float(states.sensor.total_monthly_energy_vazio.state) * 0.0951  + float(states.sensor.total_monthly_energy_fora_de_vazio.state) * 0.1770 + (states("input_number.energy_start_day") | int) * 0.3789) * 1.23 ) | round(3) }}
+        unit_of_measurement: "€"
+      fatura_energia_simples:
+        friendly_name: "Fatura Energia Simples"
+        value_template: >-
+          {{ ((float(states.sensor.total_monthly_energy_vazio.state) * 0.1390  + float(states.sensor.total_monthly_energy_fora_de_vazio.state) * 0.1390 + (states("input_number.energy_start_day") | int) * 0.3647) * 1.23 ) | round(3) }}
+        unit_of_measurement: "€"
+      monthly_energy_total:
+        friendly_name: "Total Energia Mensal"
+        value_template: >-
+          {{ ((states('sensor.total_monthly_energy_fora_de_vazio') | float) + (states('sensor.total_monthly_energy_vazio') | float)) | round(2) }}
+        unit_of_measurement: "kWh"
+
+      # Potencia Casa #
+      home_power_meter:
+        friendly_name: "Casa Power Meter"
+        value_template: >-
+          {{ (float(states('sensor.main_power_meter')) - float(states('sensor.duplex_power_meter'))) | round(2) }}
+        unit_of_measurement: "W"
+        icon_template: mdi:flash-circle
+        device_class: power
+
+
+  - platform: integration
+    name: "Total Energia Consumida"
+    source: sensor.main_power_meter
+    unit_prefix: k
+    round: 2
+  - platform: integration
+    name: "Duplex Energia Consumida"
+    source: sensor.duplex_power_meter
+    unit_prefix: k
+    round: 2
+  - platform: integration
+    name: "Casa Energia Consumida"
+    source: sensor.home_power_meter
+    unit_prefix: k
+    round: 2
+
+
+  - platform: integration
+    name: "Bimby Energia"
+    source: sensor.xiaomi_switch_bimby_power
+    unit_prefix: k
+    round: 3
+
+  - platform: template
+    sensors:
+      fatura_energia_bimby:
+        friendly_name: "Fatura Energia Bimby"
+        value_template: >-
+          {{ ((float(states.sensor.bimby_monthly_energy_vazio.state) * 0.1420  + float(states.sensor.bimby_monthly_energy_fora_de_vazio.state) * 0.1420) * 1.23 ) | round(2) }}
+        unit_of_measurement: "€"
+
+
+
+utility_meter:
+  total_daily_energy:
+    source: sensor.total_energia_consumida
+    cycle: daily
+    tariffs:
+      - Fora de Vazio
+      - Vazio
+  total_monthly_energy:
+    source: sensor.total_energia_consumida
+    cycle: monthly
+    offset:
+      days: 8
+    tariffs:
+      - Fora de Vazio
+      - Vazio
+  duplex_monthly_energy:
+    source: sensor.duplex_energia_consumida
+    cycle: monthly
+    offset:
+      days: 8
+    tariffs:
+      - Simples
+  home_monthly_energy:
+    source: sensor.casa_energia_consumida
+    cycle: monthly
+    offset:
+      days: 8
+    tariffs:
+      - Simples
+
+  bimby_daily_energy:
+    source: sensor.bimby_energia
+    cycle: daily
+    tariffs:
+      - Fora de Vazio
+      - Vazio
+  bimby_monthly_energy:
+    source: sensor.bimby_energia
+    cycle: monthly
+    tariffs:
+      - Fora de Vazio
+      - Vazio
+
+
+
+electricity:
+  edp:
+    country: Portugal
+    operator: EDP
+    plan: Bi-horário - ciclo diário

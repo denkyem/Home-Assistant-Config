@@ -1,0 +1,318 @@
+- id: '1586523674709'
+  alias: MQTT - ZIGBEE - Enable Zigbee Join
+  description: ''
+  trigger:
+  - entity_id: input_boolean.zigbee_permit_join
+    platform: state
+    to: 'on'
+  condition: []
+  action:
+  - data:
+      payload: 'true'
+      topic: zigbee2mqtt/bridge/config/permit_join
+    service: mqtt.publish
+  - entity_id: timer.zigbee_permit_join
+    service: timer.start
+- id: '1586524089919'
+  alias: MQTT - ZIGBEE - Disable Zigbee joining
+  description: ''
+  trigger:
+  - entity_id: input_boolean.zigbee_permit_join
+    platform: state
+    to: 'off'
+  condition: []
+  action:
+  - data:
+      payload: 'false'
+      topic: zigbee2mqtt/bridge/config/permit_join
+    service: mqtt.publish
+  - data:
+      entity_id: timer.zigbee_permit_join
+    service: timer.cancel
+- id: '1586524289729'
+  alias: MQTT - ZIGBEE - Disable Zigbee joining by timer
+  description: ''
+  trigger:
+  - event_data:
+      entity_id: timer.zigbee_permit_join
+    event_type: timer.finished
+    platform: event
+  condition: []
+  action:
+  - data:
+      payload: 'false'
+      topic: zigbee2mqtt/bridge/config/permit_join
+    service: mqtt.publish
+  - data:
+      entity_id: input_boolean.zigbee_permit_join
+    service: input_boolean.turn_off
+- id: '1586531259563'
+  alias: ENERGY - GENERAL - Increment Energy Day
+  description: ''
+  trigger:
+  - hours: '00'
+    minutes: '00'
+    platform: time_pattern
+    seconds: '01'
+  condition: []
+  action:
+  - entity_id: input_number.energy_start_day
+    service: input_number.increment
+- id: '1586531851867'
+  alias: ENERGY - GENERAL - Reset Energy Start Day
+  description: Define o dia corrente para o calculo do periodo de faturação da EDP
+  trigger:
+  - hours: '00'
+    minutes: '00'
+    platform: time_pattern
+    seconds: '05'
+  condition:
+  - condition: template
+    value_template: '{{ now().day == 8 }}'
+  action:
+  - data:
+      value: 1
+    entity_id: input_number.energy_start_day
+    service: input_number.set_value
+- id: '1586532080744'
+  alias: ENERGY - GENERAL - Troca de tarifário (Bi-Horario)
+  description: ''
+  trigger:
+  - entity_id: electricity.edp
+    platform: state
+  condition: []
+  action:
+  - data_template:
+      tariff: '{{ trigger.to_state.state }}'
+    entity_id: utility_meter.total_daily_energy
+    service: utility_meter.select_tariff
+  - data_template:
+      tariff: '{{ trigger.to_state.state }}'
+    entity_id: utility_meter.total_monthly_energy
+    service: utility_meter.select_tariff
+  - data_template:
+      tariff: '{{ trigger.to_state.state }}'
+    entity_id: utility_meter.bimby_daily_energy
+    service: utility_meter.select_tariff
+  - data_template:
+      tariff: '{{ trigger.to_state.state }}'
+    entity_id: utility_meter.bimby_monthly_energy
+    service: utility_meter.select_tariff
+- id: '1586533180467'
+  alias: STATUS - BIMBY - Cozinhando
+  description: ''
+  trigger:
+  - above: '7.3'
+    entity_id: sensor.xiaomi_switch_bimby_power
+    platform: numeric_state
+  condition:
+  - condition: and
+    conditions:
+    - condition: or
+      conditions:
+      - condition: state
+        entity_id: input_select.bimby_status
+        state: Standby
+      - condition: state
+        entity_id: input_select.bimby_status
+        state: Terminou
+      - condition: state
+        entity_id: input_select.bimby_status
+        state: Desligada
+    - condition: state
+      entity_id: switch.bimby
+      state: 'on'
+  action:
+  - data:
+      option: Cozinhando
+    entity_id: input_select.bimby_status
+    service: input_select.select_option
+  mode: single
+- id: '1586533274096'
+  alias: STATUS - BIMBY - Terminou
+  description: ''
+  trigger:
+  - above: '6'
+    below: '13'
+    entity_id: sensor.xiaomi_switch_bimby_power
+    for: 00:00:20
+    platform: numeric_state
+  condition:
+  - condition: and
+    conditions:
+    - condition: state
+      entity_id: input_select.bimby_status
+      state: Cozinhando
+    - condition: state
+      entity_id: switch.bimby
+      state: 'on'
+  action:
+  - data:
+      option: Terminou
+    entity_id: input_select.bimby_status
+    service: input_select.select_option
+  mode: single
+- id: '1586533448815'
+  alias: STATUS - BIMBY - Standby
+  description: ''
+  trigger:
+  - above: '1'
+    below: '6'
+    entity_id: sensor.xiaomi_switch_bimby_power
+    for: 00:00:15
+    platform: numeric_state
+  - entity_id: switch.bimby
+    from: 'off'
+    platform: state
+    to: 'on'
+  condition:
+  - condition: or
+    conditions:
+    - condition: state
+      entity_id: input_select.bimby_status
+      state: Cozinhando
+    - condition: state
+      entity_id: input_select.bimby_status
+      state: Desligada
+  action:
+  - data:
+      option: Standby
+    entity_id: input_select.bimby_status
+    service: input_select.select_option
+  mode: single
+- id: '1586533525724'
+  alias: STATUS - BIMBY - Desligada
+  description: ''
+  trigger:
+  - entity_id: switch.bimby
+    from: 'on'
+    platform: state
+    to: 'off'
+  - below: '2'
+    entity_id: sensor.xiaomi_switch_bimby_power
+    for: 00:00:30
+    platform: numeric_state
+  condition: []
+  action:
+  - data:
+      option: Desligada
+    entity_id: input_select.bimby_status
+    service: input_select.select_option
+  mode: single
+- id: '1591465270983'
+  alias: SYSTEM - ON BOOT
+  description: ''
+  trigger:
+  - event: start
+    platform: homeassistant
+  condition: []
+  action:
+  - data: {}
+    service: shell_command.ha_start
+- id: '1593360511095'
+  alias: SYSTEM - AutoBackup
+  description: ''
+  trigger:
+  - hours: '06'
+    minutes: '01'
+    platform: time_pattern
+    seconds: '00'
+  condition:
+  - condition: time
+    weekday:
+    - mon
+  action:
+  - data: {}
+    service: hassio.snapshot_full
+- id: '1598959654503'
+  alias: SYSTEM - Dishwasher - StandBy
+  description: ''
+  trigger:
+  - above: '1'
+    entity_id: sensor.tplink_dishwasher_power
+    for: 0:00:10
+    platform: numeric_state
+  condition:
+  - condition: state
+    entity_id: input_select.dishwasher_status
+    state: Desligada
+  action:
+  - data:
+      option: Standby
+    entity_id: input_select.dishwasher_status
+    service: input_select.select_option
+  mode: single
+- id: '1598959809253'
+  alias: SYSTEM - Dishwasher - Lavando
+  description: ''
+  trigger:
+  - above: '10'
+    entity_id: sensor.tplink_dishwasher_power
+    for: 00:00:15
+    platform: numeric_state
+  condition:
+  - condition: or
+    conditions:
+    - condition: state
+      entity_id: input_select.dishwasher_status
+      state: Desligada
+    - condition: state
+      entity_id: input_select.dishwasher_status
+      state: Standby
+  action:
+  - data:
+      option: Lavando
+    entity_id: input_select.dishwasher_status
+    service: input_select.select_option
+  mode: single
+- id: '1598959933572'
+  alias: SYSTEM - Dishwasher - Secando
+  description: ''
+  trigger:
+  - below: '16'
+    entity_id: sensor.tplink_dishwasher_power
+    for: 00:03:00
+    platform: numeric_state
+  condition:
+  - condition: state
+    entity_id: input_select.dishwasher_status
+    state: Lavando
+  action:
+  - data:
+      option: Secando
+    entity_id: input_select.dishwasher_status
+    service: input_select.select_option
+  mode: single
+- id: '1598960199459'
+  alias: SYSTEM - Dishwasher - Desligada
+  description: ''
+  trigger:
+  - below: '1'
+    entity_id: sensor.tplink_dishwasher_power
+    for: 00:00:15
+    platform: numeric_state
+  condition: []
+  action:
+  - data:
+      option: Desligada
+    entity_id: input_select.dishwasher_status
+    service: input_select.select_option
+  mode: single
+- id: '1599062340730'
+  alias: SYSTEM - Dishwasher - Terminou
+  description: ''
+  trigger:
+  - below: '16'
+    entity_id: sensor.tplink_dishwasher_power
+    for: 00:12:00
+    platform: numeric_state
+  condition:
+  - condition: state
+    entity_id: input_select.dishwasher_status
+    state: Secando
+  action:
+  - data:
+      option: Terminou
+    entity_id: input_select.dishwasher_status
+    service: input_select.select_option
+  mode: single

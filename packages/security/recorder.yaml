@@ -1,0 +1,75 @@
+recorder:
+  purge_keep_days: 90
+  db_url: !secret recorder_db_url
+
+
+
+influxdb:
+  host: !secret influxdb_host
+  port: !secret influxdb_port
+  database: !secret influxdb_database
+  username: !secret influxdb_username
+  password: !secret influxdb_password
+  max_retries: !secret influxdb_max_retries
+  default_measurement: !secret influxdb_default_measurement
+  ssl: !secret influxdb_ssl
+
+
+
+logger:
+  default: warn
+  logs:
+    homeassistant.components.vacuum: debug
+    custom_components.miio2: debug
+    homeassistant.components.command_line.switch: debug
+
+logbook:
+  include:
+    domains:
+      - person
+      - climate
+      - lock
+      - light
+
+    entities:
+      - sun.sun
+      - alarm_control_panel.ha_alarm
+      - utility_meter.bimby_monthly_energy
+      - input_select.bimby_status
+      - binary_sensor.xiaomi_sensor_porta_entrada_contact
+      - switch.wc_corredor_aquecedor
+      - switch.wc1_ventilador
+      - switch.wc_quarto_aquecedor
+      - sensor.carlos_status
+      - sensor.isabela_status
+      - switch.sonoff_rf
+  exclude:
+    entities:
+      - light.sala_luzes
+      - light.wc_corredor_luzes
+      - light.wc_quarto_luzes
+      - light.quarto_luzes
+      - light.escritorio_luzes
+      - light.cozinha_luzes
+      - light.cozinha_sala
+      - light.cozinha_bancada
+      - light.quarto_hall2
+      - light.corredor
+      - light.hall_entrada
+
+      
+
+      
+
+
+
+      
+history:
+  use_include_order: true
+  include:
+    domains:
+      - person
+      - climate
+    entities:
+      - sensor.carlos_status
+      - sensor.isabela_status

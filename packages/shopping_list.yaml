@@ -1,0 +1,23 @@
+shopping_list:
+
+
+
+sensor:
+  - platform: command_line
+    name: Shopping List
+    command: python3 /config/python_scripts/shopping_list_json.py
+    scan_interval: 10
+    json_attributes:
+      - not_complete
+      - content
+      - lista
+    value_template: '{{ value_json.state }}'
+
+
+switch:
+  - platform: command_line
+    switches:
+      shoppinglist_complete_all:
+        friendly_name: Shopping List Complete All
+        command_on: python3 /config/python_scripts/shopping_list_clear_completed.py
+        command_timeout: 1

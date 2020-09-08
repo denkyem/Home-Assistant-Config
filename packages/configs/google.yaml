@@ -1,0 +1,192 @@
+# google_assistant:
+#   project_id: !secret google_assistant_project_id
+#   service_account: !include google_service_account.json
+#   report_state: true
+#   secure_devices_pin: !secret code
+#   expose_by_default: false
+#   entity_config:
+#     sensor.aqara_sensor_office_temperature:
+#       expose: true
+#       name: Temperatura Escritório
+#       aliases:
+#         - Temperatura do escritório
+#     sensor.aqara_sensor_office_humidity:
+#       expose: true
+#       name: Humidade Escritório
+#       aliases:
+#         - Humidade do escritório
+#     sensor.xiaomi_livingroom_temperature:
+#       expose: true
+#       name: Temperatura Sala
+#       aliases:
+#         - Temperatura da sala
+#     sensor.xiaomi_livingroom_humidity:
+#       expose: true
+#       name: Humidade Sala
+#       aliases:
+#         - Humidade da sala
+#     sensor.0x00158d000410e43d_temperature:
+#       expose: true
+#       name: Temperatura Quarto
+#       aliases:
+#         - Temperatura do quarto
+#     sensor.0x00158d000410e43d_humidity:
+#       expose: true
+#       name: Humidade Quarto
+#       aliases:
+#         - Humidade do quarto
+#     sensor.home_average_temperature:
+#       expose: true
+#       name: Temperatura Casa
+#       aliases:
+#         - Temperatura da casa
+#     sensor.home_average_humidity:
+#       expose: true
+#       name: Humidade Casa
+#       aliases:
+#         - Humidade da casa
+#     light.bancada_cozinha:
+#       name: Bancada
+#       aliases:
+#         - bancada da cozinha
+#     light.cozinha_tecto:
+#       name: Projectores
+#       aliases:
+#         - Tecto da cozinha
+#         - Projectores da cozinha
+#     light.despensa:
+#       name: Despensa
+#     light.entrada_bottom_hall:
+#       name: Entrada
+#       aliases:
+#         - Projectores da entrada
+#     light.entrada_bottom_sala:
+#       name: Sala
+#       aliases:
+#         - Tecto da sala
+#     light.entrada_mesa:
+#       name: Mesa de Jantar
+#       aliases:
+#         - mesa da sala
+#     light.entrada_porta:
+#       name: Porta
+#       aliases:
+#         - Porta de entrada
+#     light.escritorio:
+#       name: Escritório
+#       aliases:
+#         - tecto do escritório
+#     light.escritorio_projectores:
+#       name: Projectores
+#       aliases:
+#         - projectores do escritório
+#         - projectores da secretária
+#         - luz do monitor
+#     light.hall_corredor:
+#       name: Corredor
+#     light.led_strip:
+#       name: Secretária
+#       aliases:
+#         - leds do escritório
+#         - leds da secretária
+#     light.luz_sala:
+#       name: Candeeiro Sofá
+#       aliases:
+#         - luz do Sofá
+#         - luz presença da sala
+#     light.mesa_de_cabeceira_carlos:
+#       name: Mesa de cabeceira do Carlos
+#       aliases:
+#         - Luz do carlos
+#     light.mesa_de_cabeceira_isabela:
+#       name: Mesa de cabeceira da Isabela
+#       aliases:
+#         - Luz da Isabela
+#     light.quarto_hall:
+#       name: Entrada
+#       aliases:
+#         - Entrada do quarto
+#     light.quarto_tecto:
+#       name: Quarto
+#       aliases:
+#         - Tecto do quarto
+#     light.wc_corredor_espelho:
+#       name: Espelho
+#       aliases:
+#         - espelho da casa de banho do corredor
+#         - espelho do wc do corredor
+#     light.wc_corredor_tecto:
+#       name: Tecto
+#       aliases:
+#         - tecto da casa de banho do corredor
+#         - tecto do wc do corredor
+#     light.wc_quarto_espelho:
+#       name: Espelho
+#       aliases:
+#         - espelho da casa de banho do quarto
+#         - espelho do wc do quarto
+#     light.wc_quarto_tecto:
+#       name: Tecto
+#       aliases:
+#         - tecto da casa de banho do quarto
+#         - tecto do wc do quarto
+#     switch.wc1_ventilador:
+#       name: Termoventilador
+#       aliases:
+#         - Termoventilador do wc do corredor
+#         - Termoventilador da casa de banho do corredor
+
+#     switch.wc_corredor_aquecedor:
+#       name: Aquecedor
+#       aliases:
+#         - Aquecedor do wc do corredor
+#         - Aquecedor da casa de banho do corredor
+#     switch.wc_quarto_aquecedor:
+#       name: Aquecedor
+#       aliases:
+#         - Aquecedor do wc do quarto
+#         - Aquecedor da casa de banho do quarto
+#     alarm_control_panel.ha_alarm:
+#       name: Alarme
+      
+# Text to speech
+tts:
+  - platform: google_translate
+    service_name: google_translate_say
+    base_url: !secret base_url_ip
+    language: 'pt'
+  
+  
+  
+notify:
+  - platform: html5
+    name: push_notification
+    vapid_pub_key: !secret google_vapid_pub_key
+    vapid_prv_key: !secret google_vapid_prv_key
+    vapid_email: !secret google_vapid_email
+
+
+
+
+# sensor:
+#   - platform: google_travel_time
+#     name: Carlos to Home
+#     api_key: !secret google_travel_apikey
+#     origin: device_tracker.life360_carlos_pereira
+#     destination: zone.home
+#     scan_interval: 400
+#     options:
+#       mode: driving
+#       language: pt-PT
+#       departure_time: now
+
+#   - platform: google_travel_time
+#     name: Isabela to Home
+#     api_key: !secret google_travel_apikey
+#     origin: device_tracker.life360_isabela_gloria
+#     destination: zone.home
+#     scan_interval: 900
+#     options:
+#       mode: driving
+#       language: pt-PT
+#       departure_time: now

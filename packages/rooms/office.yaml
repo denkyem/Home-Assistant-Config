@@ -1,0 +1,63 @@
+climate:
+  - platform: generic_thermostat
+    name: Escritorio
+    heater: switch.ikea_aquecedor_sala_switch
+    target_sensor: sensor.aqara_sensor_office_temperature
+    min_temp: 21
+    max_temp: 32
+    ac_mode: true
+    target_temp: 26.5
+    cold_tolerance: 0.2
+    hot_tolerance: 0.2
+    min_cycle_duration:
+      seconds: 20
+    initial_hvac_mode: "off"
+    away_temp: 28
+    precision: 0.5
+
+
+
+yeelight:
+  devices:
+    10.0.4.2:
+      name: Led Strip Office
+      use_music_mode: true
+      model: strip1
+  
+
+
+input_boolean:
+  timer_office_fan:
+    name: Temporizador Ventoinha
+    initial: off
+    icon: mdi:fan-off
+
+timer:
+  office_fan:
+    name: Ventoinha
+    duration: 300
+
+
+
+# ----------- Desktop --------- #
+
+switch:
+  - platform: wake_on_lan
+    mac: !secret desktop_mac
+    name: Desktop
+    host: 10.0.0.5
+
+
+binary_sensor:
+  - platform: template
+    sensors:
+      desktop:
+        friendly_name: "Desktop"
+        value_template: >-
+          {{ is_state("switch.desktop","on") }}
+        device_class: connectivity
+        icon_template: mdi:desktop-tower-monitor
+        attribute_templates:
+          ip: '10.0.0.5'
+
+# ---------- END Desktop --------- #

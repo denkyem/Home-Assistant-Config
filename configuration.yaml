@@ -1,0 +1,75 @@
+
+# Configure a default setup of Home Assistant (frontend, api, etc)
+#default_config:
+config:
+map:
+mobile_app:
+person:
+sun:
+system_health:
+updater:
+
+cloud:
+
+api:
+python_script:
+input_text:
+input_datetime:
+frontend: 
+  themes: !include_dir_merge_named themes/
+  
+  
+homeassistant:
+  customize: !include customize.yaml
+  packages: !include_dir_named packages/
+  allowlist_external_dirs:
+    - /config  
+  
+http:
+  use_x_forwarded_for: true
+  trusted_proxies: 
+    - 10.0.0.0/16
+
+  
+  
+  
+# Text to speech
+tts:
+  - platform: google_translate
+
+group: !include groups.yaml
+automation: !include automations.yaml
+script: !include scripts.yaml
+scene: !include scenes.yaml
+
+zone: !include zones.yaml
+
+
+wake_on_lan:
+
+
+shell_command:
+  reload_fuel_prices: 'bash /config/script/fuel.info.sh -f "180395 183630 180239 180251"'
+
+
+weather:
+  - platform: darksky
+    api_key: !secret darksky_apikey
+
+
+sensor:
+  - platform: time_date
+    display_options:
+      - 'time'
+      - 'date'
+      - 'date_time'
+      - 'date_time_iso'
+      - 'time_date'
+      - 'time_utc'
+      - 'beat'
+
+
+
+binary_sensor:
+  - platform: workday
+    country: PTE

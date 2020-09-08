@@ -1,0 +1,24 @@
+---
+
+
+#xioami_mi_wireless_switch:
+  #module: controllerx
+  #class: WXKG01LMLightController
+  #controller: sensor.xiaomi_mi_wireless_switch_click
+  #integration: z2m
+  #light: light.luz_sala
+
+# ikea_switch_big:
+#  module: controllerx
+#  class: E1810Controller
+#  controller: sensor.ikea_switch_big_1_action
+#  integration: z2m
+#  light: light.tasmota_ledstrip
+
+# ikea_dimmer: 
+#   module: controllerx 
+#   class: ICTCG1Controller 
+#   controller: sensor.ikea_dimmer_sala_action
+#   integration: z2m
+#   light: light.luz_sala
+

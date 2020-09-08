@@ -1,0 +1,163 @@
+sensor.epson_wf_2660_series_black_ink:
+  entity_picture: /local/images/epson/epson_ink_black.png
+sensor.epson_wf_2660_series_yellow_ink:
+  entity_picture: /local/images/epson/epson_ink_yellow.png
+sensor.epson_wf_2660_series_magenta_ink:
+  entity_picture: /local/images/epson/epson_ink_magenta.png
+sensor.epson_wf_2660_series_cyan_ink:
+  entity_picture: /local/images/epson/epson_ink_cyan.png
+sensor.deluge_status:
+  icon: mdi:cloud-download
+sensor.deluge_down_speed:
+  icon: mdi:download
+sensor.deluge_up_speed:
+  icon: mdi:upload
+person.carlos:
+  entity_picture: /local/images/person/carlos.jpg
+person.isabela:
+  entity_picture: /local/images/person/isabela.jpg
+sensor.carlos_status:
+  entity_picture: /local/images/person/carlos.jpg
+sensor.isabela_status:
+  entity_picture: /local/images/person/isabela.jpg
+sensor.hassio_temperature:
+  device_class: temperature
+  icon: mdi:thermometer
+switch.bimby:
+  icon: mdi:pot
+switch.0x000d6ffffefaf08c_switch:
+  friendly_name: Aquecedor
+  icom: mdi:radiator
+light.wc_espelho:
+  friendly_name: Espelho
+light.wc_tecto:
+  friendly_name: Tecto
+binary_sensor.alarm_panel_face_detected:
+  icon: mdi:face-recognition
+sensor.sensor_count:
+  friendly_name: Sensors
+  icon: mdi:counter
+sensor.pi_hole_temperature:
+  device_class: temperature
+sensor.esp32_livingroom_uptime: {}
+light.led_strip:
+  friendly_name: Secretária
+  icon: mdi:led-strip-variant
+light.luz_sala:
+  friendly_name: Candeeiro Sofá
+  icon: mdi:floor-lamp
+sensor.bimby_daily_energy_vazio:
+  unit_of_measurement: kWh
+sensor.bimby_monthly_energy_vazio:
+  unit_of_measurement: kWh
+sensor.climate_temperature:
+  device_class: temperature
+  unit_of_measurement: °C
+light.quarto_hall:
+  friendly_name: Hall
+  icon: mdi:track-light
+light.quarto_tecto:
+  friendly_name: Quarto
+  icon: mdi:ceiling-light
+switch.sonoff_1000a976ba:
+  friendly_name: Termoventilador
+  icon: mdi:radiator
+switch.wc1_ventilador:
+  friendly_name: Termoventilador
+  icon: mdi:radiator
+sensor.0x00158d00044a635b_temperature:
+  friendly_name: xiaomi_office_temperature
+sensor.xiaomi_office_temperature: {}
+sensor.climate_current_temperature:
+  unit_of_measurement: °C
+sensor.monthly_energy_total:
+  icon: mdi:flash-outline
+sensor.fatura_energia_simples:
+  icon: mdi:currency-eur
+sensor.fatura_energia:
+  icon: mdi:currency-eur
+light.escritorio:
+  friendly_name: Escritório
+  icon: mdi:ceiling-light
+light.wc_corredor_espelho:
+  friendly_name: Espelho
+  icon: mdi:outdoor-lamp
+light.wc_corredor_tecto:
+  friendly_name: Tecto
+  icon: mdi:track-light
+switch.wc_corredor_aquecedor:
+  friendly_name: Aquecedor
+  icon: mdi:radiator-disabled
+light.entrada_porta:
+  friendly_name: Porta
+  icon: mdi:track-light
+light.hall_corredor:
+  friendly_name: Corredor
+  icon: mdi:track-light
+light.entrada_bottom_hall:
+  friendly_name: Entrada
+  icon: mdi:vanity-light
+light.entrada_mesa:
+  friendly_name: Mesa de Jantar
+  icon: mdi:ceiling-light
+light.entrada_bottom_sala:
+  friendly_name: Sala
+  icon: mdi:wall-sconce-flat
+light.bancada_cozinha:
+  friendly_name: Bancada
+  icon: mdi:led-strip-variant
+light.cozinha_tecto:
+  friendly_name: Projectores
+  icon: mdi:lightbulb-multiple
+light.mesa_de_cabeceira_carlos:
+  friendly_name: Cabeceira Carlos
+  icon: mdi:floor-lamp-variant
+light.mesa_de_cabeceira_isabela:
+  friendly_name: Cabeceira Isabela
+  icon: mdi:floor-lamp-variant
+sensor.home_average_humidity:
+  icon: mdi:water-percent
+sensor.home_average_temperature:
+  icon: mdi:thermometer
+sensor.duplex_monthly_energy_simples:
+  friendly_name: Duplex Energia Mensal
+  icon: mdi:flash-outline
+sensor.home_monthly_energy_simples:
+  friendly_name: Casa Energia Mensal
+  icon: mdi:flash-outline
+light.wc_quarto_espelho:
+  friendly_name: Espelho
+  icon: mdi:outdoor-lamp
+light.wc_quarto_tecto:
+  friendly_name: Tecto
+  icon: mdi:track-light
+switch.wc_quarto_aquecedor:
+  friendly_name: Aquecedor
+  icon: mdi:radiator-disabled
+light.escritorio_projectores:
+  friendly_name: Projectores
+  icon: mdi:focus-field-horizontal
+light.despensa:
+  friendly_name: Despensa
+  icon: mdi:lightbulb-on-outline
+sensor.asuswrt_download:
+  icon: mdi:cloud-download-outline
+sensor.asuswrt_upload:
+  icon: mdi:cloud-upload-outline
+switch.desktop:
+  friendly_name: Computador
+  icon: mdi:desktop-tower-monitor
+light.tasmota_ledstrip:
+  friendly_name: Luz Ambiente Sala
+  icon: mdi:led-strip
+group.all_lights:
+  icon: mdi:home-lightbulb-outline
+switch.sonoff_rf:
+  friendly_name: Amplificador
+  icon: mdi:amplifier
+input_boolean.expand_escritorio_luzes:
+  icon: mdi:toggle-switch-outline
+device_tracker.life360_isabela_gloria:
+  entity_picture: /local/images/person/isabela.jpg
+device_tracker.life360_carlos_pereira:
+  entity_picture: /local/images/person/carlos.jpg

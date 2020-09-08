@@ -1,0 +1,11 @@
+light:
+  - platform: switch
+    name: Mesa de Cabeceira Carlos
+    entity_id: switch.ikea_cabeceira_carlos_switch
+  - platform: switch
+    name: Mesa de Cabeceira Isabela
+    entity_id: switch.ikea_cabeceira_isabela_switch
+    
+
+
+

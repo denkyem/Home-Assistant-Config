@@ -1,0 +1,145 @@
+input_select:
+  washing_machine_status:
+    name: Washing Machine Status
+    icon: mdi:washing-machine
+    options:
+      - Idle
+      - Running
+      - Finishing
+      - Clean
+  dishwasher_status:
+    name: Dishwasher Status
+    icon: mdi:dishwasher
+    options:
+      - Desligada
+      - Standby
+      - Lavando
+      - Secando
+      - Terminou
+  bimby_status:
+    name: Bimby Status
+    icon: mdi:noodles
+    options:
+      - Desligada
+      - Standby
+      - Cozinhando
+      - Terminou
+
+
+light:
+  - platform: mqtt
+    name: "Bancada Cozinha"
+    state_topic: "shellies/shelly-cozinha-bancada/relay/0"
+    command_topic: "shellies/shelly-cozinha-bancada/relay/0/command"
+    availability_topic: "shellies/shelly-cozinha-bancada/online"
+    payload_on: "on"
+    payload_off: "off"
+    payload_available: "true"
+    payload_not_available: "false"
+    qos: 1
+    retain: true
+
+binary_sensor:
+  - platform: template
+    sensors:
+      equipamentos_cozinha:
+        friendly_name: 'Equipamentos Cozinha'
+        value_template: '{{ states("input_select.bimby_status")!="Desligada" or states("input_select.dishwasher_status")!="Desligada"}}'
+
+
+sensor:
+  - platform: history_stats
+    name: Bimby Running Month
+    entity_id: input_select.bimby_status
+    state: 'Running'
+    type: time
+    start: '{{ now().replace(day=1).replace(hour=0).replace(minute=0).replace(second=0) }}'
+    end: '{{ now() }}'
+
+  - platform: template
+    sensors:
+      tplink_dishwasher_power:
+        friendly_name: "Dishwasher Power Consumption"
+        unit_of_measurement: 'W'
+        device_class: power
+        value_template: >-
+          {{ states.switch.tplink_dishwasher_switch.attributes.current_power_w }}
+
+      dishwasher_status:
+        friendly_name: Máquina de Loiça
+        icon_template: mdi:dishwasher
+        value_template: >-
+          {{ states.input_select.dishwasher_status.state }}
+
+      bimby_status:
+        friendly_name: Bimby
+        icon_template: mdi:pot
+        value_template: >-
+          {{ states.input_select.bimby_status.state }}
+
+      bimby_running_month_minutes:
+        friendly_name: "Bimby Running Month Minutes"
+        value_template: >-
+          {{ (states('sensor.bimby_running_month') | float * 60) | round(0) }}
+
+
+
+
+
+input_boolean:
+  timer_cozinha:
+    name: Temporizador Cozinha
+    initial: off
+    icon: mdi:timer-sand
+
+input_number:
+  timer_cozinha:
+    name: Tempo
+    initial: 10
+    min: 1
+    max: 60
+    step: 1
+
+timer:
+  timer_cozinha:
+    name: Tempo restante
+    duration: 600
+
+
+
+
+# automation:
+
+  # - alias: 'Notificar Temporizador Cozinha'
+  #   trigger:
+  #   - platform: event
+  #     event_type: timer.finished
+  #     event_data:
+  #       entity_id: timer.timer_cozinha
+  #   action:
+  #   - service: notify.tv_sala
+  #     data:
+  #       message: 'O temporizador da cozinha terminou.'
+  #   - service: input_boolean.turn_off
+  #     data:
+  #       entity_id: input_boolean.timer_cozinha
+  #   - service: input_number.set_value
+  #     data:
+  #       entity_id: input_number.timer_cozinha
+  #       value: 10
+  #   - condition: state
+  #     entity_id: light.luz_sala
+  #     state: 'on'
+  #   - service: light.turn_on
+  #     data:
+  #       entity_id: light.luz_sala
+  #       effect: Twitter
+  #   - delay: 00:00:30
+  #   - data_template:
+  #       color_temp: '{{ state_attr(''binary_sensor.yeelight_previous_state'',''color_temp'')
+  #         }}'
+  #       brightness: '{{ state_attr(''binary_sensor.yeelight_previous_state'',''brightness'')
+  #         }}'
+  #       entity_id: light.luz_sala
+  #     service: light.turn_on
+
